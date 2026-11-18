@@ -1,0 +1,11 @@
+# StatsBomb data and derived event-level tables are not redistributed (StatsBomb user agreement); results/*.parquet are
+# large intermediate files (their content needed by the page is in explorer/data.js)
+statsbomb-open-data/
+data/
+results/*.parquet
+# Python / tooling
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+.DS_Store

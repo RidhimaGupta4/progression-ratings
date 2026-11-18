@@ -1,0 +1,164 @@
+
+=== progression: players fitted 1777, appearances 19476, R-hat max 1.004, ESS min 1613, divergences 0
+    measure                     analysis            predictor  n_players     wmse  wmse_minus_bayes  diff_ci_lo  diff_ci_hi
+progression                       H1->H2    league_group_mean        998 0.004054          0.001591    0.000948    0.002435
+progression                       H1->H2       raw_first_half        998 0.003032          0.000569    0.000352    0.000791
+progression                       H1->H2 bayes_posterior_mean        998 0.002462          0.000000    0.000000    0.000000
+progression H1->H2 | single-team players    league_group_mean        927 0.004070               NaN         NaN         NaN
+progression H1->H2 | single-team players       raw_first_half        927 0.003014               NaN         NaN         NaN
+progression H1->H2 | single-team players bayes_posterior_mean        927 0.002445               NaN         NaN         NaN
+predictive interval coverage: {0.5: 0.504, 0.8: 0.788, 0.95: 0.935}
+    measure analysis  level         part  n_players  coverage  median_width
+progression   H1->H2    0.8 bottom third        333     0.847         0.119
+progression   H1->H2    0.8 middle third        332     0.798         0.118
+progression   H1->H2    0.8    top third        333     0.718         0.114
+progression   H1->H2    0.8      top 10%        103     0.680         0.119
+    measure analysis group  reliability  minutes_needed  minutes_ci_lo  minutes_ci_hi   tau  sigma
+progression   H1->H2    CB          0.7     1587.630005    1192.182007    2130.832031 0.026  0.071
+progression   H1->H2 FB/WB          0.7     3982.402100    2585.220947    6763.851074 0.030  0.131
+progression   H1->H2 DM/CM          0.7     1251.380981     969.487976    1620.640991 0.047  0.115
+progression   H1->H2  AM/W          0.7     1435.118042    1115.384033    1871.159058 0.068  0.178
+progression   H1->H2    CF          0.7     2850.875977    1867.916016    4740.312988 0.046  0.169
+    measure analysis  level         part  n_players  coverage  ci_lo  ci_hi
+progression   H1->H2    0.8          all        998     0.788  0.756  0.817
+progression   H1->H2    0.8 bottom third        333     0.847  0.801  0.888
+progression   H1->H2    0.8 middle third        332     0.798  0.757  0.838
+progression   H1->H2    0.8    top third        333     0.718  0.664  0.771
+progression   H1->H2    0.8      top 10%        103     0.680  0.559  0.794
+    measure analysis minutes_band  n_players  empirical_corr  ci_lo  ci_hi  model_implied_corr
+progression   H1->H2      450-899        439           0.532  0.433  0.615               0.500
+progression   H1->H2     900-1349        368           0.602  0.448  0.708               0.618
+progression   H1->H2        1350+        191           0.690  0.560  0.776               0.663
+
+=== progression_player_noise: players fitted 1777, appearances 19476, R-hat max 1.007, ESS min 601, divergences 0
+                 measure                     analysis            predictor  n_players     wmse  wmse_minus_bayes  diff_ci_lo  diff_ci_hi
+progression_player_noise                       H1->H2    league_group_mean        998 0.004396          0.001434    0.000968    0.002000
+progression_player_noise                       H1->H2       raw_first_half        998 0.003032          0.000070   -0.000541    0.000528
+progression_player_noise                       H1->H2 bayes_posterior_mean        998 0.002962          0.000000    0.000000    0.000000
+progression_player_noise H1->H2 | single-team players    league_group_mean        927 0.004433               NaN         NaN         NaN
+progression_player_noise H1->H2 | single-team players       raw_first_half        927 0.003014               NaN         NaN         NaN
+progression_player_noise H1->H2 | single-team players bayes_posterior_mean        927 0.002966               NaN         NaN         NaN
+predictive interval coverage: {0.5: 0.441, 0.8: 0.714, 0.95: 0.89}
+                 measure analysis  level         part  n_players  coverage  median_width
+progression_player_noise   H1->H2    0.8 bottom third        333     0.706         0.087
+progression_player_noise   H1->H2    0.8 middle third        332     0.756         0.102
+progression_player_noise   H1->H2    0.8    top third        333     0.682         0.122
+progression_player_noise   H1->H2    0.8      top 10%        103     0.670         0.128
+                 measure analysis group  reliability  minutes_needed  minutes_ci_lo  minutes_ci_hi   tau  sigma
+progression_player_noise   H1->H2    CB          0.7     1188.220947     892.210022    1609.777954 0.024  0.058
+progression_player_noise   H1->H2 FB/WB          0.7     3028.604004    2040.217041    4814.914062 0.027  0.102
+progression_player_noise   H1->H2 DM/CM          0.7     1438.040039    1054.756958    2001.220947 0.037  0.098
+progression_player_noise   H1->H2  AM/W          0.7     1424.989990    1058.334961    1972.985962 0.057  0.149
+progression_player_noise   H1->H2    CF          0.7     2826.143066    1741.012939    5015.558105 0.039  0.142
+                 measure analysis  level         part  n_players  coverage  ci_lo  ci_hi
+progression_player_noise   H1->H2    0.8          all        998     0.714  0.682  0.744
+progression_player_noise   H1->H2    0.8 bottom third        333     0.706  0.653  0.756
+progression_player_noise   H1->H2    0.8 middle third        332     0.756  0.712  0.799
+progression_player_noise   H1->H2    0.8    top third        333     0.682  0.624  0.739
+progression_player_noise   H1->H2    0.8      top 10%        103     0.670  0.565  0.779
+                 measure analysis minutes_band  n_players  empirical_corr  ci_lo  ci_hi  model_implied_corr
+progression_player_noise   H1->H2      450-899        439           0.538  0.435  0.623               0.410
+progression_player_noise   H1->H2     900-1349        368           0.614  0.466  0.718               0.532
+progression_player_noise   H1->H2        1350+        191           0.692  0.568  0.777               0.556
+
+=== passes: players fitted 1777, appearances 19476, R-hat max 1.010, ESS min 514, divergences 0
+measure                     analysis            predictor  n_players       wmse  wmse_minus_bayes  diff_ci_lo  diff_ci_hi
+ passes                       H1->H2    league_group_mean        998 122.624321         92.911307   62.558786  132.809084
+ passes                       H1->H2       raw_first_half        998  30.869984          1.156971   -0.758948    2.878239
+ passes                       H1->H2 bayes_posterior_mean        998  29.713013          0.000000    0.000000    0.000000
+ passes H1->H2 | single-team players    league_group_mean        927 125.935048               NaN         NaN         NaN
+ passes H1->H2 | single-team players       raw_first_half        927  30.411559               NaN         NaN         NaN
+ passes H1->H2 | single-team players bayes_posterior_mean        927  29.614119               NaN         NaN         NaN
+predictive interval coverage: {0.5: 0.458, 0.8: 0.732, 0.95: 0.889}
+measure analysis  level         part  n_players  coverage  median_width
+ passes   H1->H2    0.8 bottom third        333     0.814        11.847
+ passes   H1->H2    0.8 middle third        332     0.744        11.573
+ passes   H1->H2    0.8    top third        333     0.640        11.490
+ passes   H1->H2    0.8      top 10%        103     0.592        11.147
+measure analysis group  reliability  minutes_needed  minutes_ci_lo  minutes_ci_hi    tau  sigma
+ passes   H1->H2    CB          0.7      381.217987     310.397003     468.324005 10.270 13.837
+ passes   H1->H2 FB/WB          0.7      392.006989     322.561005     476.808990  8.079 11.038
+ passes   H1->H2 DM/CM          0.7      262.575012     221.880997     310.515015 11.911 13.319
+ passes   H1->H2  AM/W          0.7      198.903000     167.658005     237.628998  9.382  9.131
+ passes   H1->H2    CF          0.7      212.089005     169.852005     265.795990  5.956  5.986
+measure analysis  level         part  n_players  coverage  ci_lo  ci_hi
+ passes   H1->H2    0.8          all        998     0.732  0.694  0.768
+ passes   H1->H2    0.8 bottom third        333     0.814  0.764  0.858
+ passes   H1->H2    0.8 middle third        332     0.744  0.690  0.792
+ passes   H1->H2    0.8    top third        333     0.640  0.573  0.699
+ passes   H1->H2    0.8      top 10%        103     0.592  0.487  0.701
+measure analysis minutes_band  n_players  empirical_corr  ci_lo  ci_hi  model_implied_corr
+ passes   H1->H2      450-899        439           0.819  0.755  0.867               0.864
+ passes   H1->H2     900-1349        368           0.881  0.814  0.922               0.905
+ passes   H1->H2        1350+        191           0.892  0.817  0.933               0.923
+
+=== passes_player_noise: players fitted 1777, appearances 19476, R-hat max 1.018, ESS min 374, divergences 0
+            measure                     analysis            predictor  n_players       wmse  wmse_minus_bayes  diff_ci_lo  diff_ci_hi
+passes_player_noise                       H1->H2    league_group_mean        998 123.949614         93.174217   63.209329  132.608494
+passes_player_noise                       H1->H2       raw_first_half        998  30.869984          0.094587   -3.096188    2.729093
+passes_player_noise                       H1->H2 bayes_posterior_mean        998  30.775397          0.000000    0.000000    0.000000
+passes_player_noise H1->H2 | single-team players    league_group_mean        927 127.438923               NaN         NaN         NaN
+passes_player_noise H1->H2 | single-team players       raw_first_half        927  30.411559               NaN         NaN         NaN
+passes_player_noise H1->H2 | single-team players bayes_posterior_mean        927  30.824158               NaN         NaN         NaN
+predictive interval coverage: {0.5: 0.437, 0.8: 0.706, 0.95: 0.891}
+            measure analysis  level         part  n_players  coverage  median_width
+passes_player_noise   H1->H2    0.8 bottom third        333     0.757        10.335
+passes_player_noise   H1->H2    0.8 middle third        332     0.705        11.026
+passes_player_noise   H1->H2    0.8    top third        333     0.658        12.626
+passes_player_noise   H1->H2    0.8      top 10%        103     0.621        13.112
+            measure analysis group  reliability  minutes_needed  minutes_ci_lo  minutes_ci_hi    tau  sigma
+passes_player_noise   H1->H2    CB          0.7      366.559998     297.877991     451.446014 10.100 13.344
+passes_player_noise   H1->H2 FB/WB          0.7      382.886993     309.567993     470.463989  7.998 10.800
+passes_player_noise   H1->H2 DM/CM          0.7      238.602005     196.300995     292.393005 11.462 12.217
+passes_player_noise   H1->H2  AM/W          0.7      175.335999     145.529999     209.735992  9.128  8.341
+passes_player_noise   H1->H2    CF          0.7      203.182999     161.580994     257.832001  5.825  5.730
+            measure analysis  level         part  n_players  coverage  ci_lo  ci_hi
+passes_player_noise   H1->H2    0.8          all        998     0.706  0.671  0.741
+passes_player_noise   H1->H2    0.8 bottom third        333     0.757  0.704  0.806
+passes_player_noise   H1->H2    0.8 middle third        332     0.705  0.656  0.749
+passes_player_noise   H1->H2    0.8    top third        333     0.658  0.586  0.730
+passes_player_noise   H1->H2    0.8      top 10%        103     0.621  0.487  0.764
+            measure analysis minutes_band  n_players  empirical_corr  ci_lo  ci_hi  model_implied_corr
+passes_player_noise   H1->H2      450-899        439           0.819  0.755  0.867               0.867
+passes_player_noise   H1->H2     900-1349        368           0.881  0.814  0.922               0.900
+passes_player_noise   H1->H2        1350+        191           0.893  0.818  0.934               0.910
+
+=== progression_team_adjusted: players fitted 1777, appearances 19476, R-hat max 1.003, ESS min 1435, divergences 0
+                  measure                     analysis            predictor  n_players     wmse  wmse_minus_bayes  diff_ci_lo  diff_ci_hi
+progression_team_adjusted                       H1->H2    league_group_mean        998 0.004043          0.001622    0.000962    0.002487
+progression_team_adjusted                       H1->H2       raw_first_half        998 0.003032          0.000611    0.000387    0.000849
+progression_team_adjusted                       H1->H2 bayes_posterior_mean        998 0.002421          0.000000    0.000000    0.000000
+progression_team_adjusted H1->H2 | single-team players    league_group_mean        927 0.004059               NaN         NaN         NaN
+progression_team_adjusted H1->H2 | single-team players       raw_first_half        927 0.003014               NaN         NaN         NaN
+progression_team_adjusted H1->H2 | single-team players bayes_posterior_mean        927 0.002403               NaN         NaN         NaN
+predictive interval coverage: {0.5: 0.506, 0.8: 0.783, 0.95: 0.937}
+                  measure analysis  level         part  n_players  coverage  median_width
+progression_team_adjusted   H1->H2    0.8 bottom third        333     0.856         0.118
+progression_team_adjusted   H1->H2    0.8 middle third        332     0.792         0.114
+progression_team_adjusted   H1->H2    0.8    top third        333     0.700         0.115
+progression_team_adjusted   H1->H2    0.8      top 10%        103     0.650         0.118
+                  measure analysis group  reliability  minutes_needed  minutes_ci_lo  minutes_ci_hi   tau  sigma
+progression_team_adjusted   H1->H2    CB          0.7     3512.070068    2293.415039    6208.250000 0.017  0.071
+progression_team_adjusted   H1->H2 FB/WB          0.7     4602.480957    2829.474121    8742.549805 0.028  0.131
+progression_team_adjusted   H1->H2 DM/CM          0.7     1696.483032    1280.758057    2304.289062 0.041  0.115
+progression_team_adjusted   H1->H2  AM/W          0.7     1575.081055    1205.170044    2114.427002 0.065  0.178
+progression_team_adjusted   H1->H2    CF          0.7     2912.885986    1859.052002    5081.291992 0.045  0.169
+                  measure analysis  level         part  n_players  coverage  ci_lo  ci_hi
+progression_team_adjusted   H1->H2    0.8          all        998     0.783  0.752  0.810
+progression_team_adjusted   H1->H2    0.8 bottom third        333     0.856  0.813  0.895
+progression_team_adjusted   H1->H2    0.8 middle third        332     0.792  0.740  0.837
+progression_team_adjusted   H1->H2    0.8    top third        333     0.700  0.653  0.748
+progression_team_adjusted   H1->H2    0.8      top 10%        103     0.650  0.524  0.783
+                  measure analysis minutes_band  n_players  empirical_corr  ci_lo  ci_hi  model_implied_corr
+progression_team_adjusted   H1->H2      450-899        439           0.475  0.372  0.567               0.461
+progression_team_adjusted   H1->H2     900-1349        368           0.550  0.403  0.657               0.572
+progression_team_adjusted   H1->H2        1350+        191           0.670  0.520  0.769               0.618
+
+model choice: chosen                         progression
+rule_a_overall_80_within_3pts        False
+rule_b_top_third_closer_to_80        False
+overall80_original                0.787575
+overall80_player_noise            0.714429
+top_third80_original              0.717718
+top_third80_player_noise          0.681682
+rank agreement chosen model vs team-adjusted posterior means: 0.978

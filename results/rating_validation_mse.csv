@@ -1,0 +1,31 @@
+measure,analysis,predictor,n_players,wmse,wmse_minus_bayes,diff_ci_lo,diff_ci_hi
+progression,H1->H2,league_group_mean,998,0.004053629770914722,0.0015912237259010464,0.0009476172200391354,0.002435056685430944
+progression,H1->H2,raw_first_half,998,0.003031863626765268,0.000569457581751592,0.00035238995683219203,0.0007908575780614161
+progression,H1->H2,bayes_posterior_mean,998,0.002462406045013676,0.0,0.0,0.0
+progression,H1->H2 | single-team players,league_group_mean,927,0.004069921266866672,,,
+progression,H1->H2 | single-team players,raw_first_half,927,0.0030144684393672754,,,
+progression,H1->H2 | single-team players,bayes_posterior_mean,927,0.002444963029605673,,,
+progression_player_noise,H1->H2,league_group_mean,998,0.004395669067454828,0.0014337888001966603,0.0009683797600167509,0.001999773723238744
+progression_player_noise,H1->H2,raw_first_half,998,0.003031863626765268,6.998335950710033e-05,-0.0005408656082083609,0.0005284800856717378
+progression_player_noise,H1->H2,bayes_posterior_mean,998,0.0029618802672581675,0.0,0.0,0.0
+progression_player_noise,H1->H2 | single-team players,league_group_mean,927,0.004432916979178525,,,
+progression_player_noise,H1->H2 | single-team players,raw_first_half,927,0.0030144684393672754,,,
+progression_player_noise,H1->H2 | single-team players,bayes_posterior_mean,927,0.002965689883107232,,,
+passes,H1->H2,league_group_mean,998,122.6243208423468,92.91130736831285,62.55878576235162,132.80908444642242
+passes,H1->H2,raw_first_half,998,30.869984215764962,1.1569707417310013,-0.7589477375056629,2.878239351503529
+passes,H1->H2,bayes_posterior_mean,998,29.71301347403396,0.0,0.0,0.0
+passes,H1->H2 | single-team players,league_group_mean,927,125.9350475158419,,,
+passes,H1->H2 | single-team players,raw_first_half,927,30.411558898106893,,,
+passes,H1->H2 | single-team players,bayes_posterior_mean,927,29.61411903544169,,,
+passes_player_noise,H1->H2,league_group_mean,998,123.94961410700644,93.17421706704043,63.20932914721482,132.60849403625969
+passes_player_noise,H1->H2,raw_first_half,998,30.869984215764962,0.09458717579895293,-3.0961878719762095,2.72909339799473
+passes_player_noise,H1->H2,bayes_posterior_mean,998,30.77539703996601,0.0,0.0,0.0
+passes_player_noise,H1->H2 | single-team players,league_group_mean,927,127.4389234971465,,,
+passes_player_noise,H1->H2 | single-team players,raw_first_half,927,30.411558898106893,,,
+passes_player_noise,H1->H2 | single-team players,bayes_posterior_mean,927,30.824157936112712,,,
+progression_team_adjusted,H1->H2,league_group_mean,998,0.004042676489050285,0.0016217127780072571,0.0009618781053906386,0.0024865612734220528
+progression_team_adjusted,H1->H2,raw_first_half,998,0.003031863626765268,0.00061089991572224,0.00038724129777244963,0.0008486288965879397
+progression_team_adjusted,H1->H2,bayes_posterior_mean,998,0.0024209637110430278,0.0,0.0,0.0
+progression_team_adjusted,H1->H2 | single-team players,league_group_mean,927,0.004059236220009826,,,
+progression_team_adjusted,H1->H2 | single-team players,raw_first_half,927,0.0030144684393672754,,,
+progression_team_adjusted,H1->H2 | single-team players,bayes_posterior_mean,927,0.0024032679334896655,,,

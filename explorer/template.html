@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball-progression ratings with honest uncertainty · Big-4 leagues 2015/16</title>
+<meta name="description" content="Bayesian ratings of open-play ball progression for 1,300+ players in the Premier League, La Liga, Serie A and Ligue 1 (2015/16), with 80% intervals, reliability and season paths. Data: StatsBomb Open Data.">
+<style>
+/*__FONTS_CSS__*/
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb; --panel: #ffffff; --ink: #0b0b0b; --ink2: #52514e; --muted: #75746f; --line: #e3e2dd;
+  --grid: #eeede9; --blue: #2a78d6; --blue-soft: #cde2fb; --orange: #eb6834; --focus: #1c5cab;
+  --cb: #2a78d6; --fb: #eb6834; --dm: #1baf7a; --am: #eda100; --cf: #e87ba4;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--ink); font: 15px/1.5 'Barlow', system-ui, sans-serif; }
+h1, h2, h3, .cond { font-family: 'Barlow Condensed', 'Barlow', system-ui, sans-serif; }
+a { color: var(--focus); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 22px 20px 40px; }
+header { display: flex; gap: 20px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+header h1 { font-size: 34px; line-height: 1.05; margin: 0 0 6px; font-weight: 700; letter-spacing: 0.2px; }
+header p.lede { margin: 0; color: var(--ink2); max-width: 700px; }
+.logo { text-align: right; font-size: 12px; color: var(--muted); }
+.logo img { width: 190px; height: auto; display: block; margin: 0 0 4px auto; }
+.kpis { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0 8px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; min-width: 200px; flex: 1; }
+.kpi .v { font: 600 26px/1.1 'Barlow Condensed', sans-serif; }
+.kpi .l { color: var(--ink2); font-size: 13px; }
+.controls { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin: 18px 0 14px; padding: 12px 14px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+.controls label { display: flex; flex-direction: column; font-size: 12px; color: var(--ink2); gap: 3px; font-weight: 500; }
+select, input[type=search] { font: 15px 'Barlow', sans-serif; padding: 6px 8px; border: 1px solid #c9c8c2; border-radius: 6px; background: #fff; color: var(--ink); }
+input[type=search] { width: 260px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+.panel h2 { margin: 0 0 2px; font-size: 22px; font-weight: 600; }
+.sub { color: var(--ink2); font-size: 13px; margin: 0 0 10px; }
+.axis { display: grid; grid-template-columns: 210px 1fr 54px; font-size: 11px; color: var(--muted); }
+.axis .ticks { position: relative; height: 16px; }
+.axis .ticks span { position: absolute; transform: translateX(-50%); }
+ol.rank { list-style: none; margin: 0; padding: 0; }
+ol.rank li { margin: 0; }
+ol.rank button { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 210px 1fr 54px;
+  align-items: center; width: 100%; padding: 3px 0; border-radius: 4px; }
+ol.rank button:hover, ol.rank button[aria-pressed=true] { background: #f1f6fd; }
+ol.rank button:focus-visible { outline: 2px solid var(--focus); }
+.nm { font-size: 14px; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 8px; }
+.nm small { display: block; color: var(--muted); font-size: 11.5px; }
+.nm .n { color: var(--muted); display: inline-block; min-width: 22px; }
+.bar { position: relative; height: 22px; }
+.bar .gl { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+.bar .iv { position: absolute; top: 8px; height: 6px; border-radius: 3px; opacity: 0.9; }
+.bar .pt { position: absolute; top: 4px; width: 14px; height: 14px; border-radius: 50%; margin-left: -7px; border: 2px solid var(--panel); }
+.bar .raw { position: absolute; top: 7px; width: 8px; height: 8px; border-radius: 50%; margin-left: -4px; border: 1.5px solid var(--ink2); background: transparent; }
+.val { text-align: right; font: 600 15px 'Barlow Condensed', sans-serif; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink2); margin-top: 8px; }
+.legend i { display: inline-block; vertical-align: middle; margin-right: 5px; }
+.card .who { font: 600 26px/1.1 'Barlow Condensed', sans-serif; margin: 0; }
+.card .meta { color: var(--ink2); font-size: 14px; margin: 2px 0 10px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+.stat { border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+.stat .v { font: 600 21px/1.1 'Barlow Condensed', sans-serif; }
+.stat .l { font-size: 11.5px; color: var(--ink2); }
+svg text { font-family: 'Barlow', sans-serif; }
+.tip { position: absolute; pointer-events: none; background: #0b0b0b; color: #fff; font-size: 12.5px; padding: 6px 8px; border-radius: 5px; white-space: nowrap; display: none; z-index: 5; }
+.chartbox { position: relative; }
+details { margin-top: 8px; font-size: 13px; }
+details table { border-collapse: collapse; margin-top: 6px; font-size: 12.5px; }
+details td, details th { padding: 2px 8px; border-bottom: 1px solid var(--grid); text-align: right; }
+.mins { margin-top: 16px; }
+.mins .row { display: grid; grid-template-columns: 190px 1fr 210px; gap: 10px; align-items: center; padding: 4px 0; font-size: 14px; }
+.mins .track { height: 12px; background: var(--grid); border-radius: 6px; position: relative; overflow: hidden; }
+.mins .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; }
+.mins .mark { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink2); left: 70%; }
+input[type=range] { width: 100%; accent-color: var(--blue); }
+.notes { margin-top: 18px; font-size: 13.5px; color: var(--ink2); }
+.notes h2 { color: var(--ink); font-size: 20px; margin: 0 0 6px; }
+.notes ul { margin: 0; padding-left: 18px; }
+.notes li { margin-bottom: 5px; }
+footer { margin-top: 18px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+@media (max-width: 600px) {
+  header h1 { font-size: 28px; }
+  .axis, ol.rank button { grid-template-columns: 128px 1fr 44px; }
+  .nm { font-size: 13px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .mins .row { grid-template-columns: 1fr; gap: 2px; padding: 6px 0; }
+  input[type=search] { width: 100%; }
+  .controls label { flex: 1 1 140px; }
+  .logo { text-align: left; } .logo img { margin: 0 0 4px; }
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+  <div>
+    <h1>Who moves the ball forward, and how sure can we be?</h1>
+    <p class="lede">Bayesian ratings of open-play ball progression (passes, crosses, carries and dribbles) for every outfield
+    player with 450+ minutes in the Premier League, La Liga, Serie A and Ligue 1, 2015/16. Every rating carries an
+    80% interval, and the method was checked forward in time: fitted on the first half of the season, scored on the second.</p>
+  </div>
+  <div class="logo"><img src="data:image/png;base64,/*__LOGO_B64__*/" alt="StatsBomb">Data: StatsBomb Open Data</div>
+</header>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="controls" role="group" aria-label="Filters">
+  <label>League <select id="league"></select></label>
+  <label>Position group <select id="group"></select></label>
+  <label>Minimum minutes <select id="minmin"><option value="450">450+</option><option value="900" selected>900+</option><option value="1500">1,500+</option><option value="2250">2,250+</option></select></label>
+  <label>Find a player <input type="search" id="search" list="names" placeholder="Type a name" autocomplete="off"></label>
+  <datalist id="names"></datalist>
+</div>
+
+<div class="grid2">
+  <section class="panel" aria-labelledby="rank-h">
+    <h2 id="rank-h">Top 20 by rating</h2>
+    <p class="sub" id="rank-sub"></p>
+    <div class="axis" aria-hidden="true"><span></span><div class="ticks" id="ticks"></div><span></span></div>
+    <ol class="rank" id="rank"></ol>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="panel card" aria-labelledby="who" aria-live="polite">
+    <p class="who" id="who"></p>
+    <p class="meta" id="meta"></p>
+    <div class="stats" id="stats"></div>
+    <h3 style="margin:4px 0 0;font-size:17px;font-weight:600">How the rating firmed up over the season</h3>
+    <p class="sub" style="margin-bottom:4px">Rating after each appearance, with its 80% interval. Dashed: league-position average.
+    Thin line: raw rate (no shrinkage). Illustration: uses the full-season model settings, so it is not a forecast.</p>
+    <div class="chartbox" id="pathbox"><svg id="path" width="100%" viewBox="0 0 560 270" role="img"></svg><div class="tip" id="tip"></div></div>
+    <details><summary>Show the season path as a table</summary><div id="pathtable"></div></details>
+  </section>
+</div>
+
+<section class="panel mins" aria-labelledby="mins-h">
+  <h2 id="mins-h">How many minutes before a rating means something?</h2>
+  <p class="sub">Reliability is the share of the spread between players that is skill rather than noise (1 = all skill).
+  Estimated on the first half of the season and checked against the second (see the project README). Drag to change the minutes.</p>
+  <label class="sr" for="mslider">Minutes of data</label>
+  <input type="range" id="mslider" min="90" max="3420" step="90" value="900" aria-describedby="mval">
+  <p style="margin:2px 0 8px;font-weight:600" id="mval"></p>
+  <div id="minsrows"></div>
+  <p class="sub" style="margin-top:6px">Tick mark: reliability 0.7. Interval: typical 80% interval half-width at these minutes, before any other information.</p>
+</section>
+
+<section class="notes" aria-labelledby="notes-h">
+  <h2 id="notes-h">What the numbers mean, and what they do not</h2>
+  <ul>
+    <li><b>Unit.</b> Each action is valued by how much it changes the acting team's chance of scoring soon minus its chance of conceding soon
+    (an action-value model in the style of VAEP). A rating of 0.10 means about one tenth of a goal-probability unit added per 90 minutes through open-play ball progression.</li>
+    <li><b>Leakage control.</b> The action-value model that scores a league was trained only on the first halves of the other three leagues.
+    The rating method was validated by fitting on first halves only and predicting second halves.</li>
+    <li><b>Team context is in the number.</b> A player in a dominant team gets more valuable situations. A team-adjusted variant
+    ranks players almost identically, but player and team effects cannot be separated cleanly within one season.</li>
+    <li><b>Shrinkage.</b> Players with few minutes are pulled towards their league-position average. That is deliberate: it is what made the
+    first-half ratings better predictors of the second half than raw rates.</li>
+    <li><b>Scope.</b> Open-play progression only: no shooting, set pieces, defending or off-ball work. Not an overall player rating.</li>
+    <li id="caveat-top"><b>Intervals for the best players are too narrow.</b></li>
+    <li><b>Top 10% chance</b> is the posterior probability that the player's true rate is in the top 10% of his league and position group (players with 900+ minutes).</li>
+  </ul>
+</section>
+
+<footer>
+  Data: StatsBomb Open Data (2015/16 Premier League, La Liga, Serie A, Ligue 1), used under the StatsBomb Public Data User Agreement.
+  Only aggregated analysis is shown here; no event data are redistributed. Non-commercial use.
+  Analysis and page: Ridhima Gupta. Fonts: Barlow (SIL Open Font License 1.1).
+</footer>
+</main>
+
+<script>
+/*__DATA_JS__*/
+</script>
+<script>
+"use strict";
+const F = DATA.fields.reduce((o, k, i) => (o[k] = i, o), {});
+const P = DATA.players.map(r => Object.fromEntries(DATA.fields.map((k, i) => [k, r[i]])));
+const byId = new Map(P.map(p => [p.id, p]));
+const GROUPS = ["CB", "FB/WB", "DM/CM", "AM/W", "CF"];
+const GNAME = {"CB": "Centre-backs", "FB/WB": "Full-backs / wing-backs", "DM/CM": "Defensive / central midfield", "AM/W": "Attacking midfield / wingers", "CF": "Centre-forwards"};
+const GCOL = {"CB": "var(--cb)", "FB/WB": "var(--fb)", "DM/CM": "var(--dm)", "AM/W": "var(--am)", "CF": "var(--cf)"};
+const LEAGUES = [...new Set(P.map(p => p.league))].sort();
+const $ = id => document.getElementById(id);
+const fmt = (x, d = 3) => x == null ? "–" : x.toFixed(d);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+let selected = null;
+
+// KPIs
+const V = DATA.validation;
+$("caveat-top").innerHTML = `<b>Intervals for the best players are too narrow.</b> Overall, the 80% intervals behaved as
+  advertised (${Math.round(V.cov80 * 100)}% coverage). But match-to-match noise grows with a player's level, and the model uses one
+  noise level per position: in validation, 80% intervals caught ${Math.round(V.cov80_top_third * 100)}% of second-half rates for the
+  top third of players and ${Math.round(V.cov80_top10 * 100)}% for the top 10% (${Math.round(V.cov80_bottom_third * 100)}% for the bottom
+  third, i.e. too wide there). Read a star's interval as roughly a two-in-three interval, and his "top 10% chance" as overconfident.
+  The ratings themselves were not inflated for top players: on average the top 10% did slightly better in the second half than predicted.`;
+$("kpis").innerHTML = [
+  [`${Math.round((1 - V.wmse_bayes / V.wmse_raw) * 100)}%`, `lower error than the raw first-half rate when predicting each player's second half (${V.n_players} players)`],
+  [`${Math.round(V.cov80 * 100)}%`, "of second-half rates fell inside the 80% predictive intervals (target 80%)"],
+  [`${P.length.toLocaleString()}`, "players rated, each with an 80% interval"],
+].map(([v, l]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+
+// controls
+$("league").innerHTML = `<option value="all">All four leagues</option>` + LEAGUES.map(l => `<option>${esc(l)}</option>`).join("");
+$("group").innerHTML = GROUPS.map(g => `<option value="${g}"${g === "DM/CM" ? " selected" : ""}>${esc(GNAME[g])}</option>`).join("");
+$("names").innerHTML = P.map(p => `<option value="${esc(p.name)} (${esc(p.team)})"></option>`).join("");
+$("legend").innerHTML = `<span><i style="width:22px;height:6px;border-radius:3px;background:var(--blue)"></i>80% interval</span>
+  <span><i style="width:12px;height:12px;border-radius:50%;background:var(--blue)"></i>Rating (posterior mean)</span>
+  <span><i style="width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink2)"></i>Raw rate</span>`;
+
+function rows() {
+  const lg = $("league").value, g = $("group").value, mm = +$("minmin").value;
+  return P.filter(p => p.group === g && p.minutes >= mm && (lg === "all" || p.league === lg))
+          .sort((a, b) => b.rating - a.rating);
+}
+
+function renderRank() {
+  const all = rows(), top = all.slice(0, 20);
+  const lg = $("league").value;
+  $("rank-sub").textContent = `${GNAME[$("group").value]}, ${lg === "all" ? "all four leagues" : lg}, ${(+$("minmin").value).toLocaleString()}+ minutes: top ${top.length} of ${all.length} players. Click a player for details.`;
+  if (!top.length) { $("rank").innerHTML = "<li>No players match.</li>"; $("ticks").innerHTML = ""; return; }
+  let lo = Math.min(...top.map(p => Math.min(p.lo80, p.raw))), hi = Math.max(...top.map(p => Math.max(p.hi80, p.raw)));
+  const pad = (hi - lo) * 0.06; lo -= pad; hi += pad;
+  const step = niceStep((hi - lo) / 4), t0 = Math.ceil(lo / step) * step, ticks = [];
+  for (let t = t0; t <= hi + 1e-12; t += step) ticks.push(+t.toFixed(6));
+  const X = v => ((v - lo) / (hi - lo) * 100).toFixed(2) + "%";
+  $("ticks").innerHTML = ticks.map(t => `<span style="left:${X(t)}">${t.toFixed(2)}</span>`).join("");
+  $("rank").innerHTML = top.map((p, i) => {
+    const c = GCOL[p.group];
+    const lab = `${i + 1}. ${p.name}, ${p.team}. Rating ${fmt(p.rating)}, 80% interval ${fmt(p.lo80)} to ${fmt(p.hi80)}, raw rate ${fmt(p.raw)}, ${p.minutes} minutes.`;
+    return `<li><button type="button" data-id="${p.id}" aria-pressed="${selected === p.id}" aria-label="${esc(lab)}">
+      <span class="nm"><span class="n">${i + 1}</span>${esc(p.name)}<small>${esc(p.team)}${lg === "all" ? " · " + esc(p.league) : ""} · ${p.minutes.toLocaleString()} min</small></span>
+      <span class="bar">${ticks.map(t => `<span class="gl" style="left:${X(t)}"></span>`).join("")}
+        <span class="iv" style="left:${X(p.lo80)};width:calc(${X(p.hi80)} - ${X(p.lo80)});background:${c}"></span>
+        <span class="pt" style="left:${X(p.rating)};background:${c}"></span>
+        <span class="raw" style="left:${X(p.raw)}"></span></span>
+      <span class="val">${fmt(p.rating)}</span></button></li>`;
+  }).join("");
+  if (selected === null) select(top[0].id, false);
+}
+
+function niceStep(raw) {
+  const e = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / e;
+  return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * e;
+}
+
+function select(id, scroll = true) {
+  selected = id;
+  const p = byId.get(id);
+  document.querySelectorAll("#rank button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.id === id)));
+  $("who").textContent = p.name;
+  $("meta").textContent = `${p.team} · ${p.league} · ${GNAME[p.group]} · ${p.minutes.toLocaleString()} minutes`;
+  const stats = [
+    [fmt(p.rating), "Rating per 90"],
+    [`${fmt(p.lo80)} to ${fmt(p.hi80)}`, "80% interval"],
+    [fmt(p.reliability, 2), "Reliability at his minutes"],
+    [p.p_top10 == null ? "–" : `${Math.round(p.p_top10 * 100)}%`, "Chance true rate is top 10% of league & position"],
+  ];
+  $("stats").innerHTML = stats.map(([v, l]) => `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  drawPath(p);
+  if (scroll && window.innerWidth < 900) $("who").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+function drawPath(p) {
+  const pts = DATA.paths[p.id] || [];
+  const svg = $("path"), W = 560, H = 270, m = {l: 46, r: 24, t: 10, b: 34};
+  const mean = DATA.cell_means[p.league + " | " + p.group];
+  const ys = pts.flatMap(q => [q[2], q[3]]).concat([mean, p.rating]);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const pad = (y1 - y0) * 0.12 || 0.02; y0 -= pad; y1 += pad;
+  const x1 = Math.max(3420, pts.length ? pts[pts.length - 1][0] : 0);
+  const X = v => m.l + v / x1 * (W - m.l - m.r), Y = v => m.t + (1 - (v - y0) / (y1 - y0)) * (H - m.t - m.b);
+  const step = niceStep((y1 - y0) / 5), yt = [];
+  for (let t = Math.ceil(y0 / step) * step; t <= y1; t += step) yt.push(+t.toFixed(6));
+  const band = pts.length ? "M" + pts.map(q => `${X(q[0])},${Y(q[3])}`).join("L") + "L" + pts.slice().reverse().map(q => `${X(q[0])},${Y(q[2])}`).join("L") + "Z" : "";
+  const line = (k) => pts.length ? "M" + pts.map(q => `${X(q[0])},${Y(q[k])}`).join("L") : "";
+  const c = GCOL[p.group];
+  svg.setAttribute("aria-label", `Season path for ${p.name}: rating ${fmt(p.rating)} after ${p.minutes} minutes, starting from the league-position average ${fmt(mean)}.`);
+  svg.innerHTML = `
+    <defs><clipPath id="clip"><rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}"/></clipPath></defs>
+    ${yt.map(t => `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="#eeede9"/><text x="${m.l - 6}" y="${Y(t) + 4}" font-size="11" fill="#75746f" text-anchor="end">${t.toFixed(2)}</text>`).join("")}
+    ${[0, 900, 1800, 2700, 3420].map(t => `<text x="${X(t)}" y="${H - m.b + 16}" font-size="11" fill="#75746f" text-anchor="middle">${t.toLocaleString()}</text>`).join("")}
+    <text x="${(m.l + W - m.r) / 2}" y="${H - 4}" font-size="11.5" fill="#52514e" text-anchor="middle">Minutes played so far</text>
+    <g clip-path="url(#clip)">
+      <path d="${band}" fill="${c}" opacity="0.22"/>
+      <line x1="${m.l}" x2="${W - m.r}" y1="${Y(mean)}" y2="${Y(mean)}" stroke="#52514e" stroke-dasharray="4 4" stroke-width="1.2"/>
+      <path d="${line(4)}" fill="none" stroke="#52514e" stroke-width="1" opacity="0.7"/>
+      <path d="${line(1)}" fill="none" stroke="${c}" stroke-width="2.4"/>
+    </g>
+    <line id="cross" y1="${m.t}" y2="${H - m.b}" stroke="#0b0b0b" stroke-width="1" opacity="0"/>
+    <circle id="dot" r="5" fill="${c}" stroke="#fff" stroke-width="2" opacity="0"/>
+    <rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent" id="hit"/>`;
+  const tip = $("tip"), hit = svg.querySelector("#hit"), cross = svg.querySelector("#cross"), dot = svg.querySelector("#dot");
+  hit.addEventListener("mousemove", ev => {
+    if (!pts.length) return;
+    const r = svg.getBoundingClientRect(), sx = (ev.clientX - r.left) * W / r.width;
+    let best = pts[0];
+    for (const q of pts) if (Math.abs(X(q[0]) - sx) < Math.abs(X(best[0]) - sx)) best = q;
+    cross.setAttribute("x1", X(best[0])); cross.setAttribute("x2", X(best[0])); cross.setAttribute("opacity", 0.35);
+    dot.setAttribute("cx", X(best[0])); dot.setAttribute("cy", Y(best[1])); dot.setAttribute("opacity", 1);
+    tip.innerHTML = `${best[0].toLocaleString()} min<br>Rating ${fmt(best[1])} (80%: ${fmt(best[2])} to ${fmt(best[3])})<br>Raw rate ${fmt(best[4])}`;
+    tip.style.display = "block";
+    const left = X(best[0]) / W * r.width;
+    tip.style.left = Math.min(left + 12, r.width - 190) + "px"; tip.style.top = (Y(best[1]) / H * r.height - 10) + "px";
+  });
+  hit.addEventListener("mouseleave", () => { tip.style.display = "none"; cross.setAttribute("opacity", 0); dot.setAttribute("opacity", 0); });
+  $("pathtable").innerHTML = `<table><thead><tr><th>Minutes</th><th>Rating</th><th>80% low</th><th>80% high</th><th>Raw rate</th></tr></thead><tbody>${
+    pts.map(q => `<tr><td>${q[0]}</td><td>${fmt(q[1])}</td><td>${fmt(q[2])}</td><td>${fmt(q[3])}</td><td>${fmt(q[4])}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function renderMinutes() {
+  const mins = +$("mslider").value, t = mins / 90;
+  $("mval").textContent = `${mins.toLocaleString()} minutes (${(mins / 90).toFixed(0)} full matches)`;
+  $("minsrows").innerHTML = GROUPS.map(g => {
+    const h = DATA.validated_hyper[g], rel = h.tau ** 2 / (h.tau ** 2 + h.sigma ** 2 / t);
+    const half = 1.2816 / Math.sqrt(1 / h.tau ** 2 + t / h.sigma ** 2);
+    return `<div class="row"><span>${esc(GNAME[g])}</span>
+      <span class="track" role="meter" aria-valuemin="0" aria-valuemax="1" aria-valuenow="${rel.toFixed(2)}" aria-label="Reliability for ${esc(GNAME[g])}"><span class="fill" style="width:${(rel * 100).toFixed(1)}%;background:${GCOL[g]}"></span><span class="mark"></span></span>
+      <span>reliability <b>${rel.toFixed(2)}</b> · interval ±${half.toFixed(3)}</span></div>`;
+  }).join("");
+}
+
+$("rank").addEventListener("click", e => { const b = e.target.closest("button"); if (b) select(+b.dataset.id); });
+["league", "group", "minmin"].forEach(id => $(id).addEventListener("change", () => { selected = null; renderRank(); }));
+$("search").addEventListener("change", e => {
+  const v = e.target.value.trim().toLowerCase();
+  const p = P.find(q => `${q.name} (${q.team})`.toLowerCase() === v) || P.find(q => q.name.toLowerCase().includes(v));
+  if (!p) return;
+  $("group").value = p.group;
+  $("league").value = p.league;
+  if (p.minutes < +$("minmin").value) $("minmin").value = "450";
+  selected = p.id;
+  renderRank();
+  select(p.id);
+});
+$("mslider").addEventListener("input", renderMinutes);
+renderRank();
+renderMinutes();
+</script>
+</body>
+</html>
